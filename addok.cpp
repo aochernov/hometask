@@ -3,21 +3,20 @@
 using namespace std;
 int addOK(int x, int y)
 {
-	int a=255, b, x1, y1, x2, y2, z, q;
-	b=a<<8;
-	b=a|b;
-	x1=b&x;
-	y1=b&y;
-	z=x1+y1;
-	z=z>>16;
-	x2=x>>16;
-	y2=y>>16;
-	x2=x2&b;
-	y2=y2&b;
-	q=x2+y2;
-	q=z+q;
-	q=q>>16;
-	q=!q;
+	int a = 1, n = 1, x1, y1, x2, y2, z, q, c;
+	c = a << 31;
+	c = ~c;
+	x1 = c & x;
+	y1 = c & y;
+	z = x1 + y1;
+	z = z >> 31;
+	z = z & n;
+	x2 = x >> 31;
+	y2 = y >> 31;
+	x2 = x2 & n;
+	y2 = y2 & n;
+	q = x2 | y2;
+	q = z & q;
 	return(q);
 }
 int main()
