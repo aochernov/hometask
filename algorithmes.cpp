@@ -215,7 +215,7 @@ int main()
     free(array_1M_2);
     merging_time_1M = merging (array_1M_3, Num_1M);
     free(array_1M_3);
-    printf("1M \t %2.6f \t %2.6f \t %2.6f \n", bubble_time_1M/CLOCKS_PER_SEC, merging_time_1M/CLOCKS_PER_SEC, quick_time_1M/CLOCKS_PER_SEC);
+    printf("1M \t %2.4f \t %2.6f \t %2.6f \n", bubble_time_1M/CLOCKS_PER_SEC, merging_time_1M/CLOCKS_PER_SEC, quick_time_1M/CLOCKS_PER_SEC);
 
     //10M
     int *array_10M_1 = (int *)malloc(Num_10M * sizeof(int));
@@ -228,7 +228,7 @@ int main()
     free(array_10M_2);
     merging_time_10M = merging (array_10M_3, Num_10M);
     free(array_10M_3);
-    printf("10M \t %2.6f \t %2.6f \t %2.6f \n", bubble_time_10M/CLOCKS_PER_SEC, merging_time_10M/CLOCKS_PER_SEC, quick_time_10M/CLOCKS_PER_SEC);
+    printf("10M \t %2.0f \t %2.6f \t %2.6f \n", bubble_time_10M/CLOCKS_PER_SEC, merging_time_10M/CLOCKS_PER_SEC, quick_time_10M/CLOCKS_PER_SEC);
 
     //100M
     int *array_100M_1 = (int *)malloc(Num_100M * sizeof(int));
@@ -241,7 +241,7 @@ int main()
     free(array_100M_2);
     merging_time_100M = merging (array_100M_3, Num_100M);
     free(array_100M_3);
-    printf("100M \t %2.6f \t %2.5f \t %2.5f \n", bubble_time_100M/CLOCKS_PER_SEC, merging_time_100M/CLOCKS_PER_SEC, quick_time_100M/CLOCKS_PER_SEC);
+    printf("100M \t %2.0f \t %2.5f \t %2.5f \n", bubble_time_100M/CLOCKS_PER_SEC, merging_time_100M/CLOCKS_PER_SEC, quick_time_100M/CLOCKS_PER_SEC);
 
     return 0;
 }
