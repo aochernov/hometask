@@ -78,7 +78,7 @@ int countelements(node *head, char el)
         }
 }
 
-int listelemts(char *s)
+int listelements(char *s)
 {
     node* head = NULL;
     head = new node;
@@ -92,6 +92,70 @@ int listelemts(char *s)
     while(head)
     {
         printf("%c: %d\n", head -> symbol, head -> count);
+        head = head -> next;
+    }
+}
+
+struct node1
+{
+    int count;
+    char symbol[10];
+    node1* next;
+};
+
+int addtoliststring(node1* prev, char *s)
+{
+    node1* n = NULL;
+    n = new node1;
+    int i;
+    for(i = 0; i <= 10; i++)
+    {
+        (n -> symbol)[i] = s[i];
+    }
+    n -> count = 1;
+    n -> next = NULL;
+    prev -> next = n;
+}
+
+int countstrings(node1 *head, char *el)
+{
+    while(head -> next != NULL && my_strcmp(head -> symbol, el) != 0)
+        {
+            head = head -> next;
+        }
+        if(my_strcmp(head -> symbol, el) != 0)
+        {
+            addtoliststring(head, el);
+        }
+        if(my_strcmp(head -> symbol, el) == 0)
+        {
+            head -> count = head -> count + 1;
+        }
+}
+
+int liststrings(void)
+{
+    char s[10];
+    int N, i;
+    printf("Please enter the number of strings: ");
+    scanf("%d", &N);
+    gets(s);
+    node1* head = NULL;
+    head = new node1;
+    head -> count = 1;
+    for(i = 0; i <= 10; i++)
+    {
+        (head -> symbol)[i] = s[i];
+    }
+    for(i = 0; i < N; i++)
+    {
+        gets(s);
+        countstrings(head, s);
+    }
+    head = head -> next;
+    while(head)
+    {
+        printf("%s: %d\n", head -> symbol, head -> count);
         head = head -> next;
     }
 }
@@ -118,5 +182,6 @@ using namespace std;
 
 int main()
 {
+    liststrings();
     return 0;
 }
