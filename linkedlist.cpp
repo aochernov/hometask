@@ -62,13 +62,40 @@ int quit(node *head)
     }
 }
 
+int cycle(node *head)
+{
+    node *n1, *n2, *n;
+    n1 = n2 = head;
+    do
+    {
+        n1 = n1 -> next;
+        n2 = (n2 -> next) -> next;
+        n = n2 ->next;
+        if (n -> next == NULL)
+        {
+                break;
+        }
+    }
+    while (n1 != n2 && n2 -> next != NULL);
+    if (n1 == n2)
+    {
+        printf ("Cycle\n");
+    }
+    else
+    {
+        printf ("No cycle\n");
+    }
+}
+
 int main()
 {
     node* head = NULL;
     head = new node;
+    printf("Please enter the first element of the list: ");
+    scanf("%d", &(head -> data));
     char input = '0';
     int number=228;
-    printf("There is the list of commands:\na <number> - add an element at the end of the list\nr <number> - remove the first matching element from the list\np - print all elements of the list\nq - quit the programm\n");
+    printf("There is the list of commands:\na <number> - add an element at the end of the list\nr <number> - remove the first matching element from the list\np - print all elements of the list\nq - quit the programm\nс - check, if there's cycle in list\n");
     while(input != 'q')
     {
         scanf("%c", &input);
@@ -85,6 +112,10 @@ int main()
         {
             scanf("%d", &number);
             removefirst(head, number);
+        }
+        if(input == 'c')
+        {
+            cycle(head);
         }
     }
     quit(head);
