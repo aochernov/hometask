@@ -33,7 +33,10 @@ int removefirst(node* head, int val)
         {
             head = head -> next;
         }
-        head -> next = (head -> next) -> next;
+        node* n = head -> next;
+        n -> next = (head -> next) -> next;
+        free(head -> next);
+        head -> next = n -> next;
     }
     else
     {
