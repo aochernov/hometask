@@ -12,12 +12,12 @@ struct node
 
 int insertafter (node* prev, int val)
 {
-    while(prev -> next != 0)
+    while (prev -> next != 0)
     {
         prev = prev -> next;
     }
-    node *n = (node*) malloc(sizeof(node));
-    if(n != 0)
+    node* n = (node*) malloc(sizeof(node));
+    if (n != 0)
     {
         n -> data = val;
         n -> next = NULL;
@@ -27,7 +27,7 @@ int insertafter (node* prev, int val)
 
 int removefirst(node* head, int val)
 {
-    if(head -> data != val)
+    if (head -> data != val)
     {
         while((head -> next) -> data != val)
         {
@@ -58,7 +58,7 @@ int print(const node *head)
 
 int quit(node *head)
 {
-    while(head)
+    while (head)
     {
         node* tmp = head -> next;
         free(head);
@@ -100,24 +100,24 @@ int main()
     char input = '0';
     int number=228;
     printf("There is the list of commands:\na <number> - add an element at the end of the list\nr <number> - remove the first matching element from the list\np - print all elements of the list\nq - quit the programm\nс - check, if there's cycle in list\n");
-    while(input != 'q')
+    while (input != 'q')
     {
         scanf("%c", &input);
-        if(input == 'p')
+        if (input == 'p')
         {
             print(head);
         }
-        if(input == 'a')
+        if (input == 'a')
         {
             scanf("%d", &number);
             insertafter(head, number);
         }
-        if(input == 'r')
+        if (input == 'r')
         {
             scanf("%d", &number);
             removefirst(head, number);
         }
-        if(input == 'c')
+        if (input == 'c')
         {
             cycle(head);
         }
