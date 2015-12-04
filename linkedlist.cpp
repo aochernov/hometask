@@ -74,13 +74,13 @@ int cycle(node *head)
     {
         n1 = n1 -> next;
         n2 = (n2 -> next) -> next;
-        n = n2 ->next;
+        n = n2 -> next;
         if (n -> next == NULL)
         {
                 break;
         }
     }
-    while (n1 != n2 && n2 -> next != NULL);
+    while (n1 != n2 && n2 -> next != NULL && (n2 -> next) -> next != NULL);
     if (n1 == n2)
     {
         printf ("Cycle\n");
@@ -98,7 +98,7 @@ int main()
     printf("Please enter the first element of the list: ");
     scanf("%d", &(head -> data));
     char input = '0';
-    int number=228;
+    int number;
     printf("There is the list of commands:\na <number> - add an element at the end of the list\nr <number> - remove the first matching element from the list\np - print all elements of the list\nq - quit the programm\nс - check, if there's cycle in list\n");
     while (input != 'q')
     {
