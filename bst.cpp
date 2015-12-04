@@ -4,123 +4,234 @@
 
 using namespace std;
 
-struct node
+struct leaf
 {
     int data;
-    node* next;
+    leaf *left;
+    leaf *right;
 };
 
-int insertafter (node* prev, int val)
+int addtotree(leaf* root, int val)
 {
-    while(prev -> next != 0)
+    if(val < root -> data)
     {
-        prev = prev -> next;
+        if(root -> left != NULL)
+        {
+            addtotree(root -> left, val);
+        }
+        else
+        {
+            leaf *l = (leaf*) malloc(sizeof(leaf));
+            l -> right = NULL;
+            l -> left = NULL;
+            l -> data = val;
+            root -> left = l;
+        }
     }
-    node *n = (node*) malloc(sizeof(node));
-    if(n != 0)
+    if(val > root -> data)
     {
-        n -> data = val;
-        n -> next = NULL;
-        prev -> next = n;
+        if(root -> right != NULL)
+        {
+            addtotree(root -> right, val);
+        }
+        else
+        {
+            leaf *l = (leaf*) malloc(sizeof(leaf));
+            l -> right = NULL;
+            l -> left = NULL;
+            l -> data = val;
+            root -> right = l;
+        }
     }
 }
 
-int removefirst(node* head, int val)
+int freealltree(leaf *root)
 {
-    if(head -> data != val)
+    if(root -> left != NULL)
     {
-        while((head -> next) -> data != val)
+        freealltree(root -> left);
+    }
+    if(root -> right != NULL)
+    {
+        freealltree(root -> right);
+    }
+    free(root);
+}
+
+int transferroot(leaf *root, leaf *head)
+{
+    addtotree(head, root -> data);
+    if(root -> left != NULL)
+    {
+        transferroot(root -> left, head);
+    }
+    if(root -> right != NULL)
+    {
+        transferroot(root -> right, head);
+    }
+}
+
+int removefromtree(leaf* root, int val, leaf* ancestor, char side, leaf* head)
+{
+    if(val < root -> data)
+    {
+        removefromtree(root -> left, val, root, 'l', head);
+    }
+    if(val > root -> data)
+    {
+        removefromtree(root -> right, val, root, 'r', head);
+    }
+    if(val == root -> data)
+    {
+        if(root -> right == NULL && root -> left == NULL)
         {
-            head = head -> next;
+            free(root);
+            if(side == 'l')
+            {
+                ancestor -> left = NULL;
+            }
+            if(side == 'r')
+            {
+                ancestor -> right = NULL;
+            }
         }
-        node* n = head -> next;
-        n -> next = (head -> next) -> next;
-        free(head -> next);
-        head -> next = n -> next;
+        else
+        {
+            if(side == 'l')
+            {
+                ancestor -> left = NULL;
+            }
+            if(side == 'r')
+            {
+                ancestor -> right = NULL;
+            }
+            if(root -> left != NULL)
+            {
+                transferroot(root -> left, head);
+            }
+            if(root -> right != NULL)
+            {
+                transferroot(root -> right, head);
+            }
+            freealltree(root);
+        }
+    }
+}
+
+int printtree(leaf *root)
+{
+    printf(" (%d:", root -> data);
+    if(root -> left != NULL)
+    {
+        printtree(root -> left);
     }
     else
     {
-        head -> data = (head -> next) -> data;
-        head -> next = (head -> next) -> next;
+        printf(" NULL,");
     }
-}
-
-int print(const node *head)
-{
-    while(head)
+    if(root -> right != NULL)
     {
-        printf("%d ", head -> data);
-        head = head -> next;
-    }
-    printf("\n");
-}
-
-int quit(node *head)
-{
-    while(head)
-    {
-        node* tmp = head -> next;
-        free(head);
-        head = tmp;
-    }
-}
-
-int cycle(node *head)
-{
-    node *n1, *n2, *n;
-    n1 = n2 = head;
-    do
-    {
-        n1 = n1 -> next;
-        n2 = (n2 -> next) -> next;
-        n = n2 ->next;
-        if (n -> next == NULL)
-        {
-                break;
-        }
-    }
-    while (n1 != n2 && n2 -> next != NULL);
-    if (n1 == n2)
-    {
-        printf ("Cycle\n");
+        printtree(root -> right);
     }
     else
     {
-        printf ("No cycle\n");
+        printf(" NULL");
+    }
+    printf(")");
+}
+
+int searchelement(leaf *root, int val)
+{
+    if(val < root -> data && root -> left != NULL)
+    {
+        searchelement(root -> left, val);
+    }
+    if(val > root -> data && root -> right != NULL)
+    {
+        searchelement(root -> right, val);
+    }
+    if(val < root -> data && root -> left == NULL)
+    {
+        printf("Not in tree\n");
+    }
+    if(val > root -> data && root -> right == NULL)
+    {
+        printf("Not in tree\n");
+    }
+    if(val == root -> data)
+    {
+        printf("In tree\n");
+    }
+}
+
+int printmin(leaf *root)
+{
+    if(root -> left != NULL)
+    {
+        printmin(root -> left);
+    }
+    printf("%d ", root -> data);
+    if(root -> right != NULL)
+    {
+        printmin(root -> right);
+    }
+}
+
+int printmax(leaf *root)
+{
+    if(root -> right != NULL)
+    {
+        printmax(root -> right);
+    }
+    printf("%d ", root -> data);
+    if(root -> left != NULL)
+    {
+        printmax(root -> left);
     }
 }
 
 int main()
 {
-    node* head = NULL;
-    head = new node;
-    printf("Please enter the first element of the list: ");
-    scanf("%d", &(head -> data));
-    char input = '0';
-    int number=228;
-    printf("There is the list of commands:\na <number> - add an element at the end of the list\nr <number> - remove the first matching element from the list\np - print all elements of the list\nq - quit the programm\nс - check, if there's cycle in list\n");
+    leaf* root = NULL;
+    root = new leaf;
+    char input = ' ';
+    int number;
+    printf("Please enter root value: ");
+    scanf("%d", &(root -> data));
+    printf("There is the list of commands:\na <number> - add an element to the tree\nr <number> - remove the element from the tree\ns <number> - search the element in the tree\np - print tree in format (a: b, c)\nm - list elements from min to max\nM - list elements from Max to min\nq - quit the programm\n");
     while(input != 'q')
     {
         scanf("%c", &input);
-        if(input == 'p')
-        {
-            print(head);
-        }
         if(input == 'a')
         {
             scanf("%d", &number);
-            insertafter(head, number);
+            addtotree(root, number);
         }
         if(input == 'r')
         {
             scanf("%d", &number);
-            removefirst(head, number);
+            removefromtree(root, number, root, 'c', root);
         }
-        if(input == 'c')
+        if(input == 'p')
         {
-            cycle(head);
+            printtree(root);
+            printf("\n");
+        }
+        if(input == 's')
+        {
+            scanf("%d", &number);
+            searchelement(root, number);
+        }
+        if(input == 'm')
+        {
+            printmin(root);
+            printf("\n");
+        }
+        if(input == 'M')
+        {
+            printmax(root);
+            printf("\n");
         }
     }
-    quit(head);
-    return 0;
+    freealltree(root);
 }
