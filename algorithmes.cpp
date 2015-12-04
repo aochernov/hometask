@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
-#define RANDOM 32768
+#define MY_RANDOM_MAX 32768
 #define Num_5 5
 #define Num_10 10
 #define Num_100 100
@@ -149,10 +149,10 @@ int main()
     int *array_main = (int *)malloc(Num_100M * sizeof(int));
     for(i = 0; i < Num_100M; i++)
     {
-        array_main[i] = 1 + rand() % RANDOM;
+        array_main[i] = 1 + rand() % MY_RANDOM_MAX;
     };
-    int *array_counting = (int *)malloc(RANDOM * sizeof(int));
-    for(i = 0; i < RANDOM; i++)
+    int *array_counting = (int *)malloc(MY_RANDOM_MAX * sizeof(int));
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -180,7 +180,7 @@ int main()
         array_5[i] = array_main[i];
     }
     counting_time_5 = counting (array_5, array_counting, Num_5);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -209,7 +209,7 @@ int main()
         array_10[i] = array_main[i];
     }
     counting_time_10 = counting (array_10, array_counting, Num_10);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -238,7 +238,7 @@ int main()
         array_100[i] = array_main[i];
     }
     counting_time_100 = counting (array_100, array_counting, Num_100);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -267,7 +267,7 @@ int main()
         array_1k[i] = array_main[i];
     }
     counting_time_1k = counting (array_1k, array_counting, Num_1k);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -296,7 +296,7 @@ int main()
         array_10k[i] = array_main[i];
     }
     counting_time_10k = counting (array_10k, array_counting, Num_10k);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -325,7 +325,7 @@ int main()
         array_100k[i] = array_main[i];
     }
     counting_time_100k = counting (array_100k, array_counting, Num_100k);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -354,7 +354,7 @@ int main()
         array_1M[i] = array_main[i];
     }
     counting_time_1M = counting (array_1M, array_counting, Num_1M);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
@@ -383,7 +383,7 @@ int main()
         array_10M[i] = array_main[i];
     }
     counting_time_10M = counting (array_10M, array_counting, Num_10M);
-    for(i = 0; i < RANDOM; i++)
+    for(i = 0; i < MY_RANDOM_MAX; i++)
     {
         array_counting[i] = 0;
     }
