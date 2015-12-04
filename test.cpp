@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#define STRINGLENGTH 10
 
 int my_strlen(char *s)
 {
@@ -25,8 +26,12 @@ int my_strcmp(char *s1, char *s2)
 
 int my_strcpy(char *s1, char *s2)
 {
-    int i;
-    for(i = 0; i < my_strlen(s1); i++)
+    int i, length = 0;
+    while(s1[i] != '\0')
+    {
+        length++;
+    };
+    for(i = 0; i < length; i++)
     {
         if(s2[i] == '\0')
         {
@@ -38,8 +43,16 @@ int my_strcpy(char *s1, char *s2)
 
 int my_strctt(char *s1, char *s2)
 {
-    int i, l = my_strlen(s1);
-    for(i = 0; i < my_strlen(s2) + 1; i++)
+    int i, l = 0, length = 0;
+    while(s1[i] != '\0')
+    {
+        l++;
+    };
+    while(s2[i] != '\0')
+    {
+        length++;
+    }
+    for(i = 0; i < length + 1; i++)
     {
         s1[i + l] = s2[i];
     }
@@ -99,7 +112,7 @@ int listelements(char *s)
 struct node1
 {
     int count;
-    char symbol[10];
+    char symbol[STRINGLENGTH];
     node1* next;
 };
 
@@ -108,7 +121,7 @@ int addtoliststring(node1* prev, char *s)
     node1* n = NULL;
     n = new node1;
     int i;
-    for(i = 0; i <= 10; i++)
+    for(i = 0; i <= STRINGLENGTH; i++)
     {
         (n -> symbol)[i] = s[i];
     }
@@ -117,7 +130,7 @@ int addtoliststring(node1* prev, char *s)
     prev -> next = n;
 }
 
-int countstrings(node1 *head, char *el)
+int counter(node1 *head, char *el)
 {
     while(head -> next != NULL && my_strcmp(head -> symbol, el) != 0)
         {
@@ -133,9 +146,9 @@ int countstrings(node1 *head, char *el)
         }
 }
 
-int liststrings(void)
+int countstrings(void)
 {
-    char s[10];
+    char s[STRINGLENGTH];
     int N, i;
     printf("Please enter the number of strings: ");
     scanf("%d", &N);
@@ -143,14 +156,14 @@ int liststrings(void)
     node1* head = NULL;
     head = new node1;
     head -> count = 1;
-    for(i = 0; i <= 10; i++)
+    for(i = 0; i <= STRINGLENGTH; i++)
     {
         (head -> symbol)[i] = s[i];
     }
     for(i = 0; i < N; i++)
     {
         gets(s);
-        countstrings(head, s);
+        counter(head, s);
     }
     head = head -> next;
     while(head)
@@ -162,15 +175,15 @@ int liststrings(void)
 
 int pairedestrings(void)
 {
-    char s[10];
-    int N, i, j;
+    char s[STRINGLENGTH];
+    int N, i, j, length = my_strlen(s);
     printf("Please enter the number of strings: ");
     scanf("%d", &N);
-    char result[10] = "";
+    char result[STRINGLENGTH] = "";
     for(i = 0; i <= N; i++)
     {
         gets(s);
-        for(j = 0; j <= my_strlen(s); j++)
+        for(j = 0; j <= length; j++)
         {
             result[j] = result[j] ^ s[j];
         }
@@ -182,6 +195,5 @@ using namespace std;
 
 int main()
 {
-    liststrings();
     return 0;
 }
