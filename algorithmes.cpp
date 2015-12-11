@@ -64,6 +64,10 @@ void merge(int *a, long start, long split, long stop)
     {
 	temp = (int *)malloc(sizeof(int) * (stop - start + 1));
     }
+    else
+    {
+    	return 0;
+    }
     while (pos1 <= split && pos2 <= stop)
     {
         if (a[pos1] < a[pos2])
