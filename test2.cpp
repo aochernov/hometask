@@ -78,7 +78,7 @@ int printcomments(void)
     }
     else
     {
-        while(!feof(fo))
+        while(feof(fo))
         {
             fgets(*input, MAX_LENGTH, fo);
             while(symbol != '\0')
