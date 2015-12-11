@@ -40,9 +40,11 @@ int removefirst(node* head, int val)
     }
     else
     {
+        node* n = head -> next;
+        n -> next = (head -> next) -> next;
         head -> data = (head -> next) -> data;
-        head -> next = (head -> next) -> next;
-        free(head -> next);
+        free(head -> next)
+        head -> next = (n -> next) -> next;
     }
 }
 
@@ -56,7 +58,7 @@ int print(const node *head)
     printf("\n");
 }
 
-int quit(node *head)
+int clean(node *head)
 {
     while (head)
     {
@@ -122,6 +124,6 @@ int main()
             cycle(head);
         }
     }
-    quit(head);
+    clean(head);
     return 0;
 }
