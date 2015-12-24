@@ -60,11 +60,8 @@ void merge(int *a, long start, long split, long stop)
     long pos2 = split + 1;
     long pos3 = 0;
     int *temp;
-    if (stop - start + 1 != 0)
-    {
-	temp = (int *)malloc(sizeof(int) * (stop - start + 1));
-    }
-    else
+    temp = (int *)malloc(sizeof(int) * (stop - start + 1));
+    if (temp == NULL)
     {
     	return 0;
     }
