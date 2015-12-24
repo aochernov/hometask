@@ -74,14 +74,11 @@ void addtolist(node *head, char *string)
 
 void addtotable(cell *head, int key, char *string)
 {
-    if(key == head -> key)
+    for(int i = 0; i < key; i++)
     {
-        addtolist(head -> element, string);
+        head = head -> next;
     }
-    else
-    {
-        addtotable(head -> next, key, string);
-    }
+    addtolist(head -> element, string);
 }
 
 void printlist(node *head)
