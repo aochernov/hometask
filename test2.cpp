@@ -17,7 +17,7 @@ int removesymbol (void)
     while (input != '\0')
     {
         scanf("%c", &input);
-        if (input != symbol && input - 32 != symbol && input + 32 != symbol)
+        if (input != symbol && tolower(input) != symbol && toupper() != symbol)
         {
             printf("%c", input);
         }
@@ -83,7 +83,7 @@ int printcomments(void)
             fgets(*input, MAX_LENGTH, fo);
             while(symbol != '\0')
             {
-                if (input[i] == '/' && input[i + 1])
+                if (input[i] == '/' && input[i + 1] == '/')
                 {
                     flag = 1;
                 }
