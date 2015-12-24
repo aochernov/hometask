@@ -32,8 +32,7 @@ void createtable(cell *head, int number)
         first -> next = NULL;
         first -> count = 0;
         strcpy(first -> word, "\0");
-        cell* newcell = NULL;
-        newcell = new cell;
+        cell* newcell = (cell *)malloc(sizeof(cell));
         newcell -> key = module - number;
         newcell -> element = first;
         newcell -> next = NULL;
@@ -58,8 +57,7 @@ void addtolist(node *head, char *string)
     {
         if(head -> next == NULL)
         {
-            node* newnode = NULL;
-            newnode = new node;
+            node* newnode = (node *)malloc(sizeof(node));
             newnode -> next = NULL;
 	    newnode -> count = 1;
             strcpy(newnode -> word, string);
@@ -206,8 +204,7 @@ void statistics(cell *head)
             counter[i] = 1;
             if((head -> element) -> next != NULL)
             {
-                node *tmp;
-                tmp = new node;
+                node *tmp = (node *)malloc(sizeof(node));
                 tmp = head -> element;
                 do
                 {
@@ -257,13 +254,11 @@ using namespace std;
 
 int main()
 {
-    node* first = NULL;
-    first = new node;
+    node* first = (node *)malloc(sizeof(node));
     first -> next = NULL;
     first -> count = 0;
     strcpy(first -> word, "\0");
-    cell* table = NULL;
-    table = new cell;
+    cell* table = (cell *)malloc(sizeof(cell));
     table -> key = 0;
     table -> element = first;
     table -> next = NULL;
