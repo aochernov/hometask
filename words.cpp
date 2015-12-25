@@ -6,7 +6,7 @@
 #include <math.h>
 #define MAX_LENGTH 20
 #define module 50
-#define constant 13
+#define constant 0
 
 struct node
 {
@@ -133,18 +133,6 @@ int goodhash(char *input)
     return(hash);
 }
 
-int gethashconst(char *input)
-{
-    int length, hash = 0, i;
-    length = strlen(input);
-    for(i = 0; i < length; i++)
-    {
-        hash = hash + (input[i] * constant);
-    }
-    hash = hash % module;
-    return(hash);
-}
-
 int gethashsum(char *input)
 {
     int length, hash = 0, i;
@@ -212,7 +200,10 @@ void statistics(cell *head)
                 free(tmp);
             }
         }
-        head = head -> next;
+        if(head -> next != NULL)
+        {
+            head = head -> next;
+        }
     }
     int nonzero = 0, numberofelements = 0, minlength = 0x7FFFFFFF, maxlength = 0, arithmeticmean;
     for(i = 0; i < module; i++)
@@ -280,7 +271,7 @@ void readfile(char *filename, cell *table, char hashtype)
         }
         if(hashtype == 'c')
         {
-            hash = gethashconst(input);
+            hash = constant;
         }
         if(hashtype == 'g')
         {
@@ -315,7 +306,6 @@ int main()
     table2 -> key = 0;
     table2 -> element = first2;
     table2 -> next = NULL;
-    createtable(table2, module - 1);
     start_time = clock();
     readfile(filename, table2, 'c');
     finish_time = clock();
@@ -365,7 +355,6 @@ int main()
     table1 -> key = 0;
     table1 -> element = first1;
     table1 -> next = NULL;
-    module = 20 * 'z';
     createtable(table1, module - 1);
     start_time = clock();
     readfile(filename, table1, 's');
