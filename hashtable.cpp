@@ -33,6 +33,10 @@ void createtable(cell *head, int number)
         first -> count = 0;
         strcpy(first -> word, "\0");
         cell* newcell = (cell *)malloc(sizeof(cell));
+        if(newcell == NULL)
+        {
+             return 1;
+        }
         newcell -> key = module - number;
         newcell -> element = first;
         newcell -> next = NULL;
@@ -58,6 +62,10 @@ void addtolist(node *head, char *string)
         if(head -> next == NULL)
         {
             node* newnode = (node *)malloc(sizeof(node));
+            if(newnode == NULL)
+            {
+                 return 1;
+            }
             newnode -> next = NULL;
 	    newnode -> count = 1;
             strcpy(newnode -> word, string);
@@ -192,6 +200,10 @@ void removefromtable(cell *head, int key, char *string)
 void statistics(cell *head)
 {
     int *counter = (int *)malloc(module * sizeof(int));
+    if(counter == NULL)
+        {
+             return 1;
+        }
     int i;
     for(i = 0; i < module; i++)
     {
@@ -205,6 +217,10 @@ void statistics(cell *head)
             if((head -> element) -> next != NULL)
             {
                 node *tmp = (node *)malloc(sizeof(node));
+                if(tmp == NULL)
+        	{
+             	     return 1;
+        	}
                 tmp = head -> element;
                 do
                 {
@@ -255,10 +271,18 @@ using namespace std;
 int main()
 {
     node* first = (node *)malloc(sizeof(node));
+    if(first == NULL)
+        {
+             return 1;
+        }
     first -> next = NULL;
     first -> count = 0;
     strcpy(first -> word, "\0");
     cell* table = (cell *)malloc(sizeof(cell));
+    if(table == NULL)
+        {
+             return 1;
+        }
     table -> key = 0;
     table -> element = first;
     table -> next = NULL;
