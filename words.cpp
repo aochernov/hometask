@@ -31,10 +31,18 @@ void createtable(cell *head, int number)
     else
     {
         node* first = (node *)malloc(sizeof(node));
+        if(first == NULL)
+        {
+             return 1;
+        }
         first -> next = NULL;
         first -> count = 0;
         strcpy(first -> word, "\0");
         cell* newcell = (cell *)malloc(sizeof(cell));
+        if(newcell == NULL)
+        {
+             return 1;
+        }
         newcell -> key = module - number;
         newcell -> element = first;
         newcell -> next = NULL;
@@ -60,6 +68,10 @@ void addtolist(node *head, char *string)
         if(head -> next == NULL)
         {
             node* newnode = (node *)malloc(sizeof(node));
+            if(newnode == NULL)
+            {
+                 return 1;
+            }
             newnode -> next = NULL;
             newnode -> count = 1;
             strcpy(newnode -> word, string);
@@ -169,6 +181,10 @@ void printtable(cell *head)
 void statistics(cell *head)
 {
     int *counter = (int *)malloc(module * sizeof(int));
+    if(counter == NULL)
+        {
+             return 1;
+        }
     int i;
     for(i = 0; i < module; i++)
     {
@@ -182,6 +198,10 @@ void statistics(cell *head)
             if((head -> element) -> next != NULL)
             {
                 node *tmp = (node *)malloc(sizeof(node));
+                if(tmp == NULL)
+                {
+                     return 1;
+                }
                 tmp = head -> element;
                 do
                 {
@@ -278,10 +298,18 @@ int main()
     float time;
     clock_t start_time, finish_time;
     node* first1 = (node *)malloc(sizeof(node));
+    if(first1 == NULL)
+        {
+             return 1;
+        }
     first1 -> next = NULL;
     first1 -> count = 0;
     strcpy(first1 -> word, "\0");
     cell* table1 = (cell *)malloc(sizeof(cell));
+    if(table1 == NULL)
+        {
+             return 1;
+        }
     table1 -> key = 0;
     table1 -> element = first1;
     table1 -> next = NULL;
@@ -297,10 +325,18 @@ int main()
     printf("Time of execution: %f\n\n", time/CLOCKS_PER_SEC);
     deletetable(table1);
     node* first2 = (node *)malloc(sizeof(node));
+    if(first2 == NULL)
+        {
+             return 1;
+        }
     first2 -> next = NULL;
     first2 -> count = 0;
     strcpy(first2 -> word, "\0");
     cell* table2 = (cell *)malloc(sizeof(cell));
+    if(table2 == NULL)
+        {
+             return 1;
+        }
     table2 -> key = 0;
     table2 -> element = first2;
     table2 -> next = NULL;
@@ -314,10 +350,18 @@ int main()
     printf("Time of execution: %f\n\n", time/CLOCKS_PER_SEC);
     deletetable(table2);
     node* first3 = (node *)malloc(sizeof(node));
+    if(first3 == NULL)
+        {
+             return 1;
+        }
     first3 -> next = NULL;
     first3 -> count = 0;
     strcpy(first3 -> word, "\0");
     cell* table3 = (cell *)malloc(sizeof(cell));
+    if(table3 == NULL)
+        {
+             return 1;
+        }
     table3 -> key = 0;
     table3 -> element = first3;
     table3 -> next = NULL;
