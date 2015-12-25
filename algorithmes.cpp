@@ -63,7 +63,7 @@ void merge(int *a, long start, long split, long stop)
     temp = (int *)malloc(sizeof(int) * (stop - start + 1));
     if (temp == NULL)
     {
-    	return 0;
+    	return 1;
     }
     while (pos1 <= split && pos2 <= stop)
     {
@@ -120,6 +120,10 @@ int counting(int myarray[], int length)
     int i, j, n;
     int *counting;
     counting = (int *)malloc(sizeof(int) * RANDOM_MAX);
+    if (counting == NULL)
+    {
+    	return 1;
+    }
     for (i = 0; i < RANDOM_MAX; i++)
     {
         counting[i] = 0;
@@ -150,6 +154,10 @@ int main()
     float bubble_time, merging_time, quick_time, counting_time;
     int i;
     int *array_main = (int *)malloc(Num_100M * sizeof(int));
+    if (array_main == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_100M; i++)
     {
         array_main[i] = 1 + rand() % RANDOM_MAX;
@@ -158,6 +166,10 @@ int main()
 
     //5
     int *array_5 = (int *)malloc(Num_5 * sizeof(int));
+    if (array_5 == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_5; i++)
     {
         array_5[i] = array_main[i];
@@ -183,6 +195,10 @@ int main()
 
     //10
     int *array_10 = (int *)malloc(Num_10 * sizeof(int));
+    if (array_10 == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_10; i++)
     {
         array_10[i] = array_main[i];
@@ -208,6 +224,10 @@ int main()
 
     //100
     int *array_100 = (int *)malloc(Num_100 * sizeof(int));
+    if (array_100 == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_100; i++)
     {
         array_100[i] = array_main[i];
@@ -233,6 +253,10 @@ int main()
 
     //1k
     int *array_1k = (int *)malloc(Num_1k * sizeof(int));
+    if (array_1k == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_1k; i++)
     {
         array_1k[i] = array_main[i];
@@ -258,6 +282,10 @@ int main()
 
     //10k
     int *array_10k = (int *)malloc(Num_10k * sizeof(int));
+    if (array_10k == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_10k; i++)
     {
         array_10k[i] = array_main[i];
@@ -283,6 +311,10 @@ int main()
 
     //100k
     int *array_100k = (int *)malloc(Num_100k * sizeof(int));
+    if (array_100k == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_100k; i++)
     {
         array_100k[i] = array_main[i];
@@ -308,6 +340,10 @@ int main()
 
     //1M
     int *array_1M = (int *)malloc(Num_1M * sizeof(int));
+    if (array_1M == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_1M; i++)
     {
         array_1M[i] = array_main[i];
@@ -333,6 +369,10 @@ int main()
 
     //10M
     int *array_10M = (int *)malloc(Num_10M * sizeof(int));
+    if (array_10M == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_10M; i++)
     {
         array_10M[i] = array_main[i];
@@ -358,6 +398,10 @@ int main()
 
     //100M
     int *array_100M = (int *)malloc(Num_100M * sizeof(int));
+    if (array_100M == NULL)
+    {
+    	return 1;
+    }
     for(i = 0; i < Num_100M; i++)
     {
         array_100M[i] = array_main[i];
