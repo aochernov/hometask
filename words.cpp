@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
-#define MAX_LENGTH 255
+#define MAX_LENGTH 20
 #define module 50
 #define constant 13
 
@@ -297,33 +297,8 @@ int main()
 {
     float time;
     clock_t start_time, finish_time;
-    node* first1 = (node *)malloc(sizeof(node));
-    if(first1 == NULL)
-        {
-             return 1;
-        }
-    first1 -> next = NULL;
-    first1 -> count = 0;
-    strcpy(first1 -> word, "\0");
-    cell* table1 = (cell *)malloc(sizeof(cell));
-    if(table1 == NULL)
-        {
-             return 1;
-        }
-    table1 -> key = 0;
-    table1 -> element = first1;
-    table1 -> next = NULL;
-    createtable(table1, module - 1);
     char filename[MAX_LENGTH];
     gets(filename);
-    start_time = clock();
-    readfile(filename, table1, 's');
-    finish_time = clock();
-    time = finish_time - start_time;
-    printf("Hash function: sum\n");
-    statistics(table1);
-    printf("Time of execution: %f\n\n", time/CLOCKS_PER_SEC);
-    deletetable(table1);
     node* first2 = (node *)malloc(sizeof(node));
     if(first2 == NULL)
         {
@@ -374,5 +349,31 @@ int main()
     statistics(table3);
     printf("Time of execution: %f\n\n", time/CLOCKS_PER_SEC);
     deletetable(table3);
+    node* first1 = (node *)malloc(sizeof(node));
+    if(first1 == NULL)
+        {
+             return 1;
+        }
+    first1 -> next = NULL;
+    first1 -> count = 0;
+    strcpy(first1 -> word, "\0");
+    cell* table1 = (cell *)malloc(sizeof(cell));
+    if(table1 == NULL)
+        {
+             return 1;
+        }
+    table1 -> key = 0;
+    table1 -> element = first1;
+    table1 -> next = NULL;
+    module = 20 * 'z';
+    createtable(table1, module - 1);
+    start_time = clock();
+    readfile(filename, table1, 's');
+    finish_time = clock();
+    time = finish_time - start_time;
+    printf("Hash function: sum\n");
+    statistics(table1);
+    printf("Time of execution: %f\n\n", time/CLOCKS_PER_SEC);
+    deletetable(table1);
     return 0;
 }
