@@ -87,6 +87,10 @@ int cycle(node *head)
     do
     {
         n1 = n1 -> next;
+        if((n2 ->) -> next == NULL)
+        {
+            return 1;
+        }
         n2 = (n2 -> next) -> next;
         n = n2 -> next;
         if (n -> next == NULL)
