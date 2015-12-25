@@ -17,6 +17,10 @@ int insertafter (node* prev, int val)
         prev = prev -> next;
     }
     node* n = (node*) malloc(sizeof(node));
+    if(n == NULL)
+    {
+        return 1;
+    }
     if (n != 0)
     {
         n -> data = val;
