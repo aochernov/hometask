@@ -29,6 +29,10 @@ int removefirst(node* head, int val)
 {
     if (head -> data != val)
     {
+        if (head -> next == NULL)
+        {
+            return 0;
+        }
         while((head -> next) -> data != val)
         {
             head = head -> next;
@@ -40,6 +44,10 @@ int removefirst(node* head, int val)
     }
     else
     {
+        if(head -> next == NULL || (head -> next) -> next == NULL)
+        {
+            return 0;
+        }
         node* n = head -> next;
         n -> next = (head -> next) -> next;
         head -> data = (head -> next) -> data;
