@@ -16,7 +16,7 @@ int my_strlen(char *s)
 int my_strcmp(char *s1, char *s2)
 {
     int comp = 0, i = 0;
-    while(s1[i] != s2[i])
+    while(s1[i] == s2[i] || s1[i] != '/0' || s2[i] != "/0")
     {
         comp = s1[i] - s2[i];
         i++;
@@ -26,13 +26,13 @@ int my_strcmp(char *s1, char *s2)
 
 int my_strcpy(char *s1, char *s2)
 {
-    int i, length = 0;
-    while(s1[i] != '\0')
-    {
-        length++;
-    };
+    int i, length = 1;
     for(i = 0; i < length; i++)
     {
+        if(s1[i] != '/0')
+        {
+            length++;
+        }
         if(s2[i] == '\0')
         {
             break;
@@ -43,18 +43,18 @@ int my_strcpy(char *s1, char *s2)
 
 int my_strctt(char *s1, char *s2)
 {
-    int i, l = 0, length = 0;
-    while(s1[i] != '\0')
-    {
-        l++;
-    };
-    while(s2[i] != '\0')
-    {
-        length++;
-    }
+    int i, l = 1, length = 1;
     for(i = 0; i < length + 1; i++)
     {
-        s1[i + l] = s2[i];
+        s1[i + l - 1] = s2[i];
+        if(s1[i] != '/0')
+        {
+            l++;
+        }
+        if(s2[i] != '/0')
+        {
+            length++;
+        }
     }
 }
 
