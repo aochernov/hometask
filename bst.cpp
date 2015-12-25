@@ -22,6 +22,10 @@ int addtotree(leaf* root, int val)
         else
         {
             leaf *l = (leaf*) malloc(sizeof(leaf));
+            if(l == NULL)
+            {
+                return 1;
+            }
             l -> right = NULL;
             l -> left = NULL;
             l -> data = val;
@@ -37,6 +41,10 @@ int addtotree(leaf* root, int val)
         else
         {
             leaf *l = (leaf*) malloc(sizeof(leaf));
+            if(l == NULL)
+            {
+                return 1;
+            }
             l -> right = NULL;
             l -> left = NULL;
             l -> data = val;
