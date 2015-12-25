@@ -84,15 +84,6 @@ void addtolist(node *head, char *string)
     }
 }
 
-void addtotable(cell *head, int key, char *string)
-{
-    for(int i = 0; i < key; i++)
-    {
-        head = head -> next;
-    }
-    addtolist(head -> element, string);
-}
-
 void deletelist(node *head)
 {
     if(head -> next == NULL)
@@ -277,7 +268,7 @@ void readfile(char *filename, cell *table, char hashtype)
         {
             hash = goodhash(input);
         }
-        addtotable(table, hash, input);
+        addtolist(table[hash] -> element, input);
     }
     fclose(fo);
 }
@@ -298,7 +289,7 @@ int main()
     first2 -> next = NULL;
     first2 -> count = 0;
     strcpy(first2 -> word, "\0");
-    cell* table2 = (cell *)malloc(sizeof(cell));
+    cell* table2 = (cell *)malloc(module * sizeof(cell));
     if(table2 == NULL)
         {
              return 1;
@@ -322,7 +313,7 @@ int main()
     first3 -> next = NULL;
     first3 -> count = 0;
     strcpy(first3 -> word, "\0");
-    cell* table3 = (cell *)malloc(sizeof(cell));
+    cell* table3 = (cell *)malloc(module * sizeof(cell));
     if(table3 == NULL)
         {
              return 1;
@@ -347,7 +338,7 @@ int main()
     first1 -> next = NULL;
     first1 -> count = 0;
     strcpy(first1 -> word, "\0");
-    cell* table1 = (cell *)malloc(sizeof(cell));
+    cell* table1 = (cell *)malloc(module * sizeof(cell));
     if(table1 == NULL)
         {
              return 1;
