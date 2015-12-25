@@ -43,19 +43,18 @@ int my_strcpy(char *s1, char *s2)
 
 int my_strctt(char *s1, char *s2)
 {
-    int i, l = 1, length = 1;
-    for(i = 0; i < length + 1; i++)
+    int i = 0, j = 0;
+    while(s1[i] != '\0')
     {
-        s1[i + l - 1] = s2[i];
-        if(s1[i] != '/0')
-        {
-            l++;
-        }
-        if(s2[i] != '/0')
-        {
-            length++;
-        }
+        i++;
     }
+    while(s2[j] != '\0')
+    {
+        s1[i] = s2[i];
+        i++;
+        j++;
+    }
+    s1[i + 1] = '\0';
 }
 
 struct node
