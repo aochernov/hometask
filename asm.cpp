@@ -17,7 +17,8 @@
 #define COMMAND_LENGTH 100
 
 using namespace std;
-bool error = false, run = true, file_error = false;
+bool error = false, run = true;
+int j, currentinstruction = 0, sp = -1;
 
 struct instruction
 {
@@ -51,6 +52,12 @@ int add_to_label_list (node *prev, int val, char mark[LABEL_LENGTH])
         prev = prev -> next;
     }
     node *n = (node*) malloc (sizeof (node));
+    if (n == NULL)
+    {
+        error = true;
+        run = false;
+        return 1;
+    }
     if(n != 0)
     {
         n -> number = val;
@@ -79,47 +86,24 @@ int getprogrammnumber (node *head, char instr_label[LABEL_LENGTH])
     }
 }
 
-int main()
+int load_programm (FILE *instr_file, node *head, instruction *instr)
 {
-    int memory[MEM_SIZE] = {0};
-    int stack[MEM_SIZE] = {0};
-    instruction instr[INST_NUMB];
-    int i = 0;
-    for (i = 0; i < INST_NUMB; i++)
-    {
-        instr[i].type = BAD_INSTR;
-        instr[i].arg.address = -1;
-    }
-    int currentprogramm = 0, sp = -1;
-    char command[COMMAND_LENGTH], input;
-    int number, j = 0;
-    node* head = NULL;
-    head = new node;
-    head -> next = NULL;
-    head -> number = -1;
-    strcpy(head -> label, " ");
-    FILE *instr_file = fopen ("instructions.txt", "r");
-    if (instr_file == NULL)
-    {
-        printf("Error. Wrong file.\n");
-        error = true;
-        run = false;
-        file_error = true;
-    }
-    while (!feof (instr_file) && file_error == false)
+    char command[COMMAND_LENGTH];
+    int number;
+    while (!feof (instr_file))
     {
         fscanf(instr_file, "%s", &command);
         int q = 1;
-        while (command[q] != 0) //"\0"
+        while (command[q] != '\0')
         {
-            if (command[q] == 59) //";"
+            if (command[q] == ';')
             {
                 command[q] = 0;
                 char comment[COMMAND_LENGTH];
                 fgets(comment, COMMAND_LENGTH, instr_file);
                 break;
             }
-            if (command[q] == 58) //":"
+            if (command[q] == ':')
             {
                 if (command[q + 1] == 0)
                 {
@@ -140,7 +124,7 @@ int main()
                 {
                     int p = 0;
                     char labelname[LABEL_LENGTH];
-                    while (command[p] != 0)
+                    while (command[p] != '\0')
                     {
                         if (p < q)
                         {
@@ -204,9 +188,9 @@ int main()
             instr[j].type = JMP_INSTR;
             fscanf (instr_file, "%s", &command);
             int q = 0;
-            while (command[q] != 0)
+            while (command[q] != '\0')
             {
-                if (command[q] == 59)
+                if (command[q] == ';')
                 {
                     command[q] = 0;
                     char comment[COMMAND_LENGTH];
@@ -234,9 +218,9 @@ int main()
             instr[j].type = BR_INSTR;
             fscanf(instr_file, "%s", &command);
             int q = 0;
-            while (command[q] != 0)
+            while (command[q] != '\0')
             {
-                if (command[q] == 59)
+                if (command[q] == ';')
                 {
                     command[q] = 0;
                     char comment[COMMAND_LENGTH];
@@ -262,7 +246,7 @@ int main()
             instr[j].type = RET_INSTR;
             j++;
         }
-        else if (command[0] == 59)
+        else if (command[0] == ';')
         {
             fgets (command, 100, instr_file);
         }
@@ -270,7 +254,7 @@ int main()
         {
             bool is_label = false;
             int q = 0;
-            while (command[q] != 0)
+            while (command[q] != '\0')
             {
 
                 q++;
@@ -288,24 +272,19 @@ int main()
             break;
         }
     }
-    if (file_error == false)
-    {
-        fclose (instr_file);
-    }
-    if (j == INST_NUMB - 1 && instr[INST_NUMB].type != 0)
-    {
-        error = true;
-        run = false;
-        printf("Error. The programm has no correct finish.\n");
-    }
+}
+
+int run_programm (instruction *instr, node *head, int *stack, int *memory)
+{
+    int number;
     while (run == true && error == false)
     {
-        switch (instr[currentprogramm].type)
+        switch (instr[currentinstruction].type)
         {
             case LD_INSTR:
                 sp++;
-                stack[sp] = memory[instr[currentprogramm].arg.address];
-                currentprogramm++;
+                stack[sp] = memory[instr[currentinstruction].arg.address];
+                currentinstruction++;
                 break;
             case ST_INSTR:
                 if (sp == -1)
@@ -316,15 +295,15 @@ int main()
                 }
                 else
                 {
-                    memory[instr[currentprogramm].arg.address] = stack[sp];
+                    memory[instr[currentinstruction].arg.address] = stack[sp];
                     sp--;
                 }
-                currentprogramm++;
+                currentinstruction++;
                 break;
             case LDC_INSTR:
                 sp++;
-                stack[sp] = instr[currentprogramm].arg.number;
-                currentprogramm++;
+                stack[sp] = instr[currentinstruction].arg.number;
+                currentinstruction++;
                 break;
             case ADD_INSTR:
                 if (sp == 0)
@@ -338,7 +317,7 @@ int main()
                     stack[sp - 1] = stack[sp] + stack[sp - 1];
                     sp--;
                 }
-                currentprogramm++;
+                currentinstruction++;
                 break;
             case SUB_INSTR:
                 if (sp == 0)
@@ -352,7 +331,7 @@ int main()
                     stack[sp - 1] = stack[sp] - stack[sp - 1];
                     sp--;
                 }
-                currentprogramm++;
+                currentinstruction++;
                 break;
             case CMP_INSTR:
                 if (sp == 0)
@@ -377,51 +356,105 @@ int main()
                     }
                     sp--;
                 }
-                currentprogramm++;
+                currentinstruction++;
                 break;
             case JMP_INSTR:
-                number = getprogrammnumber (head, instr[currentprogramm].arg.label);
+                number = getprogrammnumber (head, instr[currentinstruction].arg.label);
                 if (number == -1)
                 {
-                    printf ("Error. Label \"%s\" does not exist.\n", instr[currentprogramm].arg.label);
+                    printf ("Error. Label \"%s\" does not exist.\n", instr[currentinstruction].arg.label);
                     run = false;
                     error = true;
                 }
                 else
                 {
-                    currentprogramm = number;
+                    currentinstruction = number;
                 }
                 break;
             case BR_INSTR:
                 if (stack[sp] != 0)
                 {
-                    number = getprogrammnumber (head, instr[currentprogramm].arg.label);
+                    number = getprogrammnumber (head, instr[currentinstruction].arg.label);
                     if (number == -1)
                     {
-                        printf ("Error. Label \"%s\" does not exist.\n", instr[currentprogramm].arg.label);
+                        printf ("Error. Label \"%s\" does not exist.\n", instr[currentinstruction].arg.label);
                         run = false;
                         error = true;
                     }
                     else
                     {
-                        currentprogramm = number;
+                        currentinstruction = number;
                     }
                 }
                 else
                 {
-                    currentprogramm++;
+                    currentinstruction++;
                 }
                 break;
             case RET_INSTR:
                 run = false;
                 break;
             case BAD_INSTR:
-                printf ("Error. Incorrect instruction in line %d.\n", currentprogramm);
+                printf ("Error. Incorrect instruction in line %d.\n", currentinstruction);
                 run = false;
                 error = true;
                 break;
         }
     }
+}
+
+int main()
+{
+    int *memory, *stack;
+    memory = (int*) malloc (MEM_SIZE * sizeof (int));
+    if (memory == NULL)
+    {
+        printf("Error. Noth enough memory for creating memory of virtual machine.\n");
+        error = true;
+        run = false;
+        return 1;
+    }
+    stack = (int*) malloc (MEM_SIZE * sizeof (int));
+    if (stack == NULL)
+    {
+        printf("Error. Noth enough memory for creating stack of virtual machine.\n");
+        error = true;
+        run = false;
+        return 1;
+    }
+    instruction instr[INST_NUMB];
+    int i;
+    for (i = 0; i < INST_NUMB; i++)
+    {
+        instr[i].type = BAD_INSTR;
+        instr[i].arg.address = -1;
+    }
+    char command[COMMAND_LENGTH], input;
+    node* head = NULL;
+    head = new node;
+    head -> next = NULL;
+    head -> number = -1;
+    strcpy(head -> label, " ");
+    FILE *instr_file = fopen ("instructions.txt", "r");
+    if (instr_file == NULL)
+    {
+        printf("Error. Wrong file.\n");
+        error = true;
+        run = false;
+        return 1;
+    }
+    else
+    {
+        load_programm (instr_file, head, instr);
+        fclose (instr_file);
+    }
+    if (j == INST_NUMB - 1 && instr[INST_NUMB].type != 0)
+    {
+        error = true;
+        run = false;
+        printf("Error. The programm has no correct finish.\n");
+    }
+    run_programm (instr, head, stack, memory);
     if (run == false && error == false)
     {
         if (sp != -1)
