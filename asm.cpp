@@ -466,4 +466,6 @@ int main()
                 printf ("Programm successfully executed. No numbers in stack.\n");
             }
     }
+    free (memory);
+    free (stack);
 }
