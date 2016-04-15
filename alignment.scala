@@ -57,27 +57,52 @@ object alignment {
           }
         }
         def rigth_align (words: List[String], empty_space: Int) = {
-          new Space(empty_space) :: conv_list (words, Nil)
-        }
-        def left_align (words: List[String], empty_space: Int) = {
-          conv_list (words, Nil) ::: List(new Space(empty_space))
-        }
-        def centre_align (words: List[String], empty_space: Int) = {
-          var left_spaces = 0
-          var rigth_spaces = 0
-          if (empty_space % 2 == 0) {
-            left_spaces = empty_space / 2
-            rigth_spaces = empty_space / 2
+          if (empty_space != 0) {
+            new Space(empty_space) :: conv_list (words, Nil)
           }
           else {
-            left_spaces = 1 + empty_space / 2
-            rigth_spaces = empty_space / 2
+            conv_list (words, Nil)
           }
-          new Space(left_spaces) :: conv_list (words, Nil ::: List(new Space(rigth_spaces)))
+        }
+        def left_align (words: List[String], empty_space: Int) = {
+          if (empty_space != 0) {
+            conv_list (words, Nil) ::: List(new Space(empty_space))
+          }
+          else {
+            conv_list (words, Nil)
+          }
+        }
+        def centre_align (words: List[String], empty_space: Int) = {
+          if (empty_space != 0) {
+            var left_spaces = 0
+            var rigth_spaces = 0
+            if (empty_space % 2 == 0) {
+              left_spaces = empty_space / 2
+              rigth_spaces = empty_space / 2
+            }
+            else {
+              left_spaces = 1 + empty_space / 2
+              rigth_spaces = empty_space / 2
+            }
+            new Space(left_spaces) :: conv_list (words, Nil) ::: List(new Space(rigth_spaces))
+          }
+          else {
+            conv_list (words, Nil)
+          }
         }
         def fit_align (words: List[String], empty_space: Int) = {
-          val converted_list = conv_list (words, Nil)
-          converted_list.head :: new Space(1 + empty_space) :: converted_list.tail.tail
+          if (empty_space != 0) {
+            val converted_list = conv_list(words, Nil)
+            if (converted_list.tail.isEmpty) {
+              converted_list.head :: new Space(1 + empty_space) :: Nil
+            }
+            else {
+              converted_list.head :: new Space(1 + empty_space) :: converted_list.tail.tail
+            }
+          }
+          else {
+            conv_list(words, Nil)
+          }
         }
         val real_space = space + 1
         if (line_alignment == 'r') {
