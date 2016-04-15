@@ -157,7 +157,7 @@ object alignment {
     }
     val max = max_width (text, screen)
     if ( max >= screen) {
-      align_paragraph (text, max, al)
+      get_paragraph (text, max, al, Nil)
     }
     else {
       get_paragraph (text, screen, al, Nil)
