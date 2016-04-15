@@ -21,7 +21,7 @@ object FunSets {
    * Returns the set of the one given element.
    */
   def singletonSet(elem: Int): Set = {
-    elem => true
+    Set (elem)
   }
 
   /**
@@ -68,7 +68,7 @@ object FunSets {
       if (a > bound) {
         true
       }
-      else if (!s(a) || !p(a)) {
+      else if (!contains (s, a) || !p(a)) {
         false
       }
       else {
@@ -87,7 +87,7 @@ object FunSets {
       if (a > bound) {
         false
       }
-      else if (s(a) && p(a)) {
+      else if (contains (s, a) && p(a)) {
         true
       }
       else {
@@ -105,7 +105,7 @@ object FunSets {
       if (a > bound) {
         elem => false
       }
-      else if (s(a)) {
+      else if (contains (s, a)) {
         union (singletonSet(f(a)), iter(a + 1))
       }
       else {
