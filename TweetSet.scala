@@ -135,7 +135,7 @@ class Empty extends TweetSet {
   }
 
   def descendingByRetweet: TweetList = {
-    throw new java.util.NoSuchElementException
+    TweetList = Nil
   }
 
   /**
