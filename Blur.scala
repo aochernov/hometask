@@ -4,8 +4,6 @@ import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import swing.{MainFrame, Panel, SimpleSwingApplication}
 import java.awt.{Color, Dimension, Graphics2D}
-import org.scalameter._
-import org.scalatest.FunSuite
 
 class DataPanel(data: Array[Array[Color]]) extends Panel {
   override def paintComponent(g: Graphics2D) {
@@ -27,53 +25,6 @@ class DataPanel(data: Array[Array[Color]]) extends Panel {
       }
       g.fillRect(x1, y1, x2 - x1, y2 - y1)
     }
-  }
-}
-object Measurements extends Bench.LocalTime {
-  val test_image = BLUR.get_image("test.jpg")
-  def vertical_blur_measurement(period: Int): Unit = {
-    val blured_test_image = BLUR.vertical_blur(test_image, 10, period)
-  }
-  def horizontal_blur_measurement(period: Int): Unit = {
-    val blured_test_image = BLUR.vertical_blur(test_image, 10, period)
-  }
-  val periods: Gen[Int] = Gen.range("Periods")(1, 1000, 250)
-  performance of "Periods" in {
-    measure method "map" in {
-      using (periods) in {
-        r => vertical_blur_measurement(r)
-      }
-    }
-  }
-  performance of "Periods" in {
-    measure method "map" in {
-      using (periods) in {
-        r => horizontal_blur_measurement(r)
-      }
-    }
-  }
-}
-class Unit_Tests extends FunSuite{
-  test("Compounding") {
-    val red = 0x15
-    val green = 0xb9
-    val blue = 0x03
-    val alpha = 0x57
-    val color = 0x15b90357
-    assert(BLUR.compound(red, green, blue, alpha) == color)
-  }
-  test("Separation") {
-    val red = 0x15
-    val green = 0xb9
-    val blue = 0x03
-    val alpha = 0x57
-    val color = 0x15b90357
-    assert(BLUR.separate(color) == (red, green, blue, alpha))
-  }
-  test("Blur") {
-    val pic = new BLUR.IMG(3, 3)
-    pic.picture = Array(0x097f3abb, 0x8112c2d0, 0x35ff0017, 0xab54fd00, 0x3fdb7800, 0xdd137600, 0xa5801673, 0xffffff00, 0xdbbcda4e)
-    assert(BLUR.Blur(pic, 1, 1, 1) == 0x8f908a44)
   }
 }
 object BLUR extends SimpleSwingApplication {
@@ -136,7 +87,11 @@ object BLUR extends SimpleSwingApplication {
     val (r_sum, g_sum, b_sum, a_sum) = mixer(neighbours, 0, 0, 0, 0)
     compound((r_sum / divisor, g_sum / divisor, b_sum / divisor, a_sum / divisor))
   }
-  def horizontal_blur(pic: IMG, r: Int, period: Int): IMG = {
+  def horizontal_blur(pic: IMG, r: Int, num_of_proc: Int): IMG = {
+    var period = pic.h / num_of_proc
+    if (num_of_proc * period != pic.h) {
+      period = period + 1
+    }
     val new_img = new IMG(pic.w, pic.h)
     val tasks_list = Range(0, pic.h) by period
     val tasks = tasks_list.map(k => {
@@ -159,7 +114,11 @@ object BLUR extends SimpleSwingApplication {
     tasks.foreach(k => k.join)
     new_img
   }
-  def vertical_blur(pic: IMG, r: Int, period: Int): IMG = {
+  def vertical_blur(pic: IMG, r: Int, num_of_proc: Int): IMG = {
+    var period = pic.w / num_of_proc
+    if (num_of_proc * period != pic.w) {
+      period = period + 1
+    }
     var new_img = new IMG(pic.w, pic.h)
     val tasks_list = Range(0, pic.w) by period
     val tasks = tasks_list.map(k => {
@@ -230,7 +189,7 @@ object BLUR extends SimpleSwingApplication {
   def top = new MainFrame {
     val blur_type = readLine("Choose one of the blur types:\nv - for vertical\nh - for horizontal\n")
     val radius = readLine("Choose the radius of blur:\n")
-    val period = readLine("Choose the number of lines/columns processed in one thread:\n")
+    val number_of_processes = readLine("Choose the number of processes:\n")
     val input = readLine("Type the name of input image:\n")
     val output = readLine("Type the name of output file:\n")
     val jpg: BufferedImage = ImageIO.read(new File(input))
@@ -241,12 +200,12 @@ object BLUR extends SimpleSwingApplication {
     val picture_before = image_for_render(image)
     var picture_after: Array[Array[Color]] = Array.ofDim[Color](image.w, image.h)
     blur_type match {
-      case "v" => val apply_blur = vertical_blur(image, radius.toInt, period.toInt)
+      case "v" => val apply_blur = vertical_blur(image, radius.toInt, number_of_processes.toInt)
         for (i <- 0 until image.w; j <- 0 until image.h) {
           jpg.setRGB(i, j, (apply_blur(i, j) >>> 8))
         }
         picture_after = image_for_render(apply_blur)
-      case "h" => val apply_blur = horizontal_blur(image, radius.toInt, period.toInt)
+      case "h" => val apply_blur = horizontal_blur(image, radius.toInt, number_of_processes.toInt)
         for (i <- 0 until image.w; j <- 0 until image.h) {
           jpg.setRGB(i, j, (apply_blur(i, j) >>> 8))
         }
