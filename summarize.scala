@@ -19,6 +19,7 @@ object summarize {
     }
     val max_size = first_int.length
     var period = max_size / proc_num
+    val sum = new Array[Int](max_size)
     if(period * proc_num != max_size) {
       period = period + 1
     }
