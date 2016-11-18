@@ -24,7 +24,6 @@ object summarize {
     }
     val non_determined_array = new Array[Int](max_size)
     var determined_array = new Array[Int](max_size + 1)
-    var sum = new Array[Int](max_size)
     var need_det = false
     val set_nda_tasks_list = Range(0, max_size, period)
     val set_nda_tasks = set_nda_tasks_list.map(k => {

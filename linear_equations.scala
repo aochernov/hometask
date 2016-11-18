@@ -13,8 +13,7 @@ object linear_equations {
     if(period * proc_num != size) {
       period = period + 1
     }
-    var linear_parts = new Array[Int](size)
-    val product = new Array[Int](size)
+    var linear_parts = new Array[Int](size + 1)
     val product_tasks_list = Range(0, size, period)
     val product_tasks = product_tasks_list.map(k => {
       new Thread {
@@ -24,14 +23,12 @@ object linear_equations {
             up = size
           }
           for(i <- k until up) {
-            prod = prod + free_coef(i) * linear_parts(i)
+            prod = prod + free_coef(i) * linear_parts(size - 1 - i)
           }
         }
       }
     })
-    val buf_array = new Array[Int](size + 1)
-    left_scan.scan(linear_coef.reverse, 1, buf_array, (x: Int, y: Int) => x * y, period)
-    linear_parts = buf_array.reverse.toList.tail.toArray
+    left_scan.scan(linear_coef.reverse, 1, linear_parts, (x: Int, y: Int) => x * y, period)
     product_tasks.foreach(k => k.start)
     product_tasks.foreach(k => k.join)
     prod

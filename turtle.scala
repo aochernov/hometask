@@ -21,8 +21,6 @@ object my_turtle {
     }
     val correct_angles = new Array[Int](number + 1)
     val to_radian = Math.PI / 180
-    val x = new Array[Int](number)
-    val y = new Array[Int](number)
     val trig_tasks_list = Range(0, number, period)
     val trig_tasks = trig_tasks_list.map(k => {
       new Thread {
