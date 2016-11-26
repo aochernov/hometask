@@ -10,14 +10,14 @@ object measurements extends Bench.LocalTime {
   val parentheses = new Array[Char](array_length)
   val angle = new Array[Int](array_length)
   val dist = new Array[Int](array_length)
-  for(i <- 0 until array_length) {
+  for (i <- 0 until array_length) {
     val first = Math.abs(random.nextInt())
     val second = Math.abs(random.nextInt())
     first_int(i) = first % 10
     second_int(i) = second % 10
     linear_coef(i) = first % 25
     free_coef(i) = second % 25
-    if((first + second) % 2 == 0) {
+    if ((first + second) % 2 == 0) {
       parentheses(i) = '('
     }
     else {

@@ -2,76 +2,129 @@ object summarize {
   def solo_version(first_int: Array[Int], second_int: Array[Int]): Array[Int] = {
     var carry = 0
     var sum = new Array[Int](first_int.length)
-    for(i <- 0 until first_int.length) {
+    for (i <- 0 until first_int.length) {
       sum(i) = (first_int(i) + second_int(i) + carry) % 10
       carry = (first_int(i) + second_int(i) + carry) / 10
     }
     sum
   }
   def mult_version(first_int: Array[Int], second_int: Array[Int], proc_num: Int): Array[Int] = {
-    def det(prev: Int, next: Int): Int = {
-      if (next == 2) {
-        prev
-      }
-      else {
-        next
-      }
-    }
     val max_size = first_int.length
     var period = max_size / proc_num
-    val sum = new Array[Int](max_size)
-    if(period * proc_num != max_size) {
+    if (period * proc_num != max_size) {
       period = period + 1
     }
-    val non_determined_array = new Array[Int](max_size)
-    var determined_array = new Array[Int](max_size + 1)
-    var need_det = false
-    val set_nda_tasks_list = Range(0, max_size, period)
-    val set_nda_tasks = set_nda_tasks_list.map(k => {
-      new Thread {
-        override def run():Unit = {
-          var up = k + period
-          if (up > max_size) {
-            up = max_size
+    val sum = new Array[Int](max_size)
+    val carry = new Array[Int](max_size)
+    val det_carry = new Array[Int](max_size + 1)
+
+    def add(start: Int, end: Int): Unit = {
+      if (end - start <= period) {
+        for (i <- start until end) {
+          val summation = first_int(i) + second_int(i)
+          sum(i) = summation % 10
+          if (summation == 9) {
+            carry(i) = 2
           }
-          for(i <- k until up) {
-            val num = first_int(i) + second_int(i)
-            if(num == 9) {
-              non_determined_array(k) = 2
-              need_det = true
-            }
-            else if (num < 9) {
-              non_determined_array(i) = 0
-            }
-            else {
-              non_determined_array(i) = 1
-            }
-            sum(i) = num % 10
+          else if (summation < 9) {
+            carry(i) = 0
+          }
+          else {
+            carry(i) = 1
           }
         }
       }
-    })
-    val add_list = Range(0, max_size, period)
-    val add = add_list.map(l => {
-      new Thread {
-        override def run(): Unit = {
-          var up = l + period
-          if (up > max_size) {
-            up = max_size
+      else {
+        val mid = (end + start) / 2
+        val task = new Thread {
+          override def run(): Unit = {
+            add(mid, end)
           }
-          for (i <- l until up) {
-            if(i != 0) {
-              sum(i) = sum(i) + determined_array(i)
+        }
+        task.start
+        add(start, mid)
+        task.join
+      }
+    }
+    def up(input: Array[Int], from: Int, to: Int, period: Int): TreeRes[Int] = {
+      if (to - from <= period) {
+        var a = input(from)
+        for (i <- from + 1 until to) {
+          if (a == 2) {
+            a = input(i)
+          }
+        }
+        Leaf(from, to, a)
+      }
+      else {
+        val mid = from + (to - from) / 2
+        var tL: TreeRes[Int] = Leaf[Int](0, 0, input(0))
+        var tR: TreeRes[Int] = Leaf[Int](0, 0, input(0))
+        val right = new Thread {
+          override def run(): Unit = {
+            tR = up(input, mid, to, period)
+          }
+        }
+        right.start
+        tL = up(input, from, mid, period)
+        right.join
+        var res = tR.res
+        if (res == 2) {
+          res = tL.res
+        }
+        Node(tL, res, tR)
+      }
+    }
+    def down(input: Array[Int], a0: Int, t: TreeRes[Int], out: Array[Int]): Unit = t match {
+      case Leaf(from, to, res) => {
+        if (from < to) {
+          var a = a0
+          for (i <- from until to) {
+            if (input(i) != 2) {
+              a = input(i)
             }
+            out(i + 1) = a
           }
         }
       }
-    })
-    set_nda_tasks.foreach(k => k.start)
-    set_nda_tasks.foreach(k => k.join)
-    left_scan.scan(non_determined_array, 0, determined_array, det, period)
-    add.foreach(l => l.start)
-    add.foreach(l => l.join)
+      case Node(l, _, r) => {
+        var a = l.res
+        if (a == 2) {
+          a = a0
+        }
+        val right = new Thread {
+          override def run(): Unit = {
+            down(input, a, r, out)
+          }
+        }
+        right.start
+        down(input, a0, l, out)
+        right.join
+      }
+    }
+    def summation(start: Int, end: Int): Unit = {
+      if (end - start <= period) {
+        for (i <- start until end) {
+          sum(i) = (sum(i) + det_carry(i)) % 10
+        }
+      }
+      else {
+        val mid = (start + end) / 2
+        val task = new Thread {
+          override def run(): Unit = {
+            summation(mid, end)
+          }
+        }
+        task.start
+        summation(start, mid)
+        task.join
+      }
+    }
+
+    add(0, max_size)
+    val tree = up(carry, 0, max_size, period)
+    down(carry, 0, tree, det_carry)
+    summation(0, max_size)
     sum
   }
 }
