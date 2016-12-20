@@ -2,20 +2,21 @@ import scala.util.Random
 import scala.annotation.tailrec
 import scala.collection._
 
-object k_means {
-  class Point(val x: Double, val y: Double) {
-    def distance(point: Point): Double = {
-      val dif_x = point.x - x
-      val dif_y = point.y - y
-      dif_x * dif_x + dif_y * dif_y
-    }
-    def printpoint(): Unit = {
-      println(x, y)
-    }
-    def equal(point: Point): Boolean = {
-      (point.x == x) && (point.y == y)
-    }
+class Point(val x: Double, val y: Double) {
+  def distance(point: Point): Double = {
+    val dif_x = point.x - x
+    val dif_y = point.y - y
+    dif_x * dif_x + dif_y * dif_y
   }
+  def printpoint(): Unit = {
+    println(x, y)
+  }
+  def equal(point: Point): Boolean = {
+    (point.x == x) && (point.y == y)
+  }
+}
+
+object k_means {
   def generatePoints(k: Int, num: Int): Seq[Point] = {
     val random = scala.util.Random
     val max = Math.abs(k)
@@ -59,10 +60,15 @@ object k_means {
     means.map(i => i -> closest.getOrElse(i, empty))
   }
   def findAverage(oldMean: Point, points: GenSeq[Point]): Point = {
-    val x = points.foldLeft(0.0)((num, P) => num + P.x)
-    val y = points.foldLeft(0.0)((num, P) => num + P.y)
-    val length = points.length
-    new Point(x / length, y / length)
+    if (points.isEmpty) {
+      oldMean
+    }
+    else {
+      val x = points.foldLeft(0.0)((num, P) => num + P.x)
+      val y = points.foldLeft(0.0)((num, P) => num + P.y)
+      val length = points.length
+      new Point(x / length, y / length)
+    }
   }
   def update(classified: GenSeq[(Point, GenSeq[Point])]): GenSeq[Point] = {
     classified.map(i => findAverage(i._1, i._2))
